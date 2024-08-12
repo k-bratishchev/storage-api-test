@@ -20,6 +20,14 @@ class ProductFactory extends Factory
             'name' => $this->faker->word(),
             'quantity' => $this->faker->numberBetween(0, 1000),
             'price' => $this->faker->numberBetween(100, 10000),
+            'properties' => $this->getRandomProperties(),
+        ];
+    }
+
+    private function getRandomProperties() {
+        return [
+            'color' => $this->faker->randomElement(['red', 'green', 'blue', 'yellow', 'black', 'white']),
+            'size' => $this->faker->randomElement(['XS', 'S', 'M', 'L', 'XL', 'XXL']),
         ];
     }
 }

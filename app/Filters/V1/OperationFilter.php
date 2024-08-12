@@ -6,8 +6,8 @@ use App\Filters\ApiFilter;
 
 class OperationFilter extends ApiFilter {
     protected $safeParams = [
-        'productId' => ['eq'],
-        'quantity' => ['eq', 'lt', 'lte', 'gt', 'gte', 'ne'],
+        'productId' => self::ID_FILTERS,
+        'quantity' => self::NUMBER_FILTERS,
         'type' => ['eq'],
     ];
 

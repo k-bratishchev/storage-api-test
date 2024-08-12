@@ -17,6 +17,10 @@ use DB;
 
 class OperationController extends Controller
 {
+    public function __construct(
+        protected OperationFilter $filter,
+        protected Operation $model,
+    ) {}
     /**
      * Display a listing of the resource.
      *
@@ -24,10 +28,14 @@ class OperationController extends Controller
      */
     public function index(Request $request)
     {
-        $filter = new OperationFilter();
-        $filterItems = $filter->transform($request);
-    
-        return new OperationCollection(Operation::where($filterItems)->paginate()->appends($request->query()));
+		$query = $this->model->query();
+		$this->filter->transformQuery($query, $request);
+
+        $operations = $query->paginate(
+            perPage: $request->query('per_page', 40),
+        );
+
+        return new OperationCollection($operations->appends($request->query()));
     }
 
 

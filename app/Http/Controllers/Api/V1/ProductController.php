@@ -14,6 +14,11 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
+
+    public function __construct(
+        protected ProductsFilter $filter,
+        protected Product $model,
+    ) {}
     /**
      * Display a listing of the resource.
      *
@@ -21,18 +26,22 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $filter = new ProductsFilter();
-        $filterItems = $filter->transform($request);
+		$query = $this->model->query();
+		$this->filter->transformQuery($query, $request);
 
         $includeOperations = $request->query('includeOperations');
 
-        $products = Product::where($filterItems);
-
         if ($includeOperations) {
-            $products = $products->with('operations');
+            $query = $query->with('operations');
         }
 
-        return new ProductCollection($products->paginate()->appends($request->query()));
+        $products = $query->paginate(
+            perPage: $request->query('per_page', 40),
+        );
+
+
+
+        return new ProductCollection($products->appends($request->query()));
     }
 
     /**

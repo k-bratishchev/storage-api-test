@@ -15,6 +15,10 @@ class Product extends Model
         'price',
     ];
 
+    protected $casts = [
+        'properties' => 'array'
+    ];
+
     public function operations() {
         return $this->hasMany(Operation::class);
     }
